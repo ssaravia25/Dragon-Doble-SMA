@@ -1332,5 +1332,6 @@ with open(outpath, "w", encoding="utf-8") as f:
     f.write(html)
 print(f"\n  Report saved: {outpath}")
 
-os.system(f'open "{outpath}"')
+if not os.environ.get("CI"):
+    os.system(f'open "{outpath}"')
 print("\n=== Done ===")

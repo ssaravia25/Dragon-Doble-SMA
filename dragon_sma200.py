@@ -1175,5 +1175,6 @@ if os.path.isdir(pub_dir):
         f.write(html)
     print(f"  Public copy: {pub_path}")
 
-os.system(f'open "{outpath}"')
+if not os.environ.get("CI"):
+    os.system(f'open "{outpath}"')
 print("\n=== Done ===")

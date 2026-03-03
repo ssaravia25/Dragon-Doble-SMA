@@ -2,3 +2,7 @@ price_cache.json
 __pycache__/
 *.pyc
 .DS_Store
+.vercel
+*.pdf
+*.xlsx
+*.png
