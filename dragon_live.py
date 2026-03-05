@@ -1036,6 +1036,11 @@ body {{ font-family: 'Inter', -apple-system, sans-serif; background:#0f172a; col
 /* Footer */
 .footer {{ display:flex; justify-content:space-between; font-size:9px; color:#64748b; padding:16px 0; border-top:1px solid #334155; margin-top:24px; }}
 
+/* Tab panels */
+.tab-panel {{ display:none; }}
+.tab-panel.active {{ display:block; }}
+.backtest-frame {{ width:100%; border:none; border-radius:8px; min-height:90vh; background:#0f172a; }}
+
 @media (max-width: 900px) {{
     .exp-strip {{ grid-template-columns:repeat(4, 1fr); }}
     .signal-grid {{ grid-template-columns:repeat(2, 1fr); }}
@@ -1048,9 +1053,11 @@ body {{ font-family: 'Inter', -apple-system, sans-serif; background:#0f172a; col
 <div class="container">
 
   <div class="tabs">
-    <span class="tab active">Panel Live</span>
-    <span class="tab">Filosofia & Backtest</span>
+    <span class="tab active" onclick="switchTab(0)">Panel Live</span>
+    <span class="tab" onclick="switchTab(1)">Filosofia & Backtest</span>
   </div>
+
+  <div id="tab-live" class="tab-panel active">
 
   <div class="header">
     <div class="header-left">
@@ -1157,7 +1164,25 @@ body {{ font-family: 'Inter', -apple-system, sans-serif; background:#0f172a; col
     <span>Senal: {dates_live[-1].strftime("%Y-%m-%d")} | {n_positions} posiciones | {N_live} dias de NAV | SMA200 min {MIN_EXPOSURE:.0%}</span>
   </div>
 
+  </div><!-- end tab-live -->
+
+  <div id="tab-backtest" class="tab-panel">
+    <iframe class="backtest-frame" id="backtest-iframe" data-src="DragonDobleSMA_Backtest.html"></iframe>
+  </div>
+
 </div>
+<script>
+function switchTab(idx) {{
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach((t, i) => {{ t.classList.toggle('active', i === idx); }});
+  panels.forEach((p, i) => {{ p.classList.toggle('active', i === idx); }});
+  if (idx === 1) {{
+    const iframe = document.getElementById('backtest-iframe');
+    if (!iframe.src) iframe.src = iframe.dataset.src;
+  }}
+}}
+</script>
 </body>
 </html>'''
 
