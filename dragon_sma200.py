@@ -1230,14 +1230,14 @@ body {{ font-family: 'Inter', -apple-system, sans-serif; background:#0f172a; col
 # ═══════════════════════════════════════════════════════════════════
 # 14. OUTPUT
 # ═══════════════════════════════════════════════════════════════════
-outpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Dragon_SMA200_Backtest.html")
+outpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "DragonDobleSMA_Backtest.html")
 with open(outpath, "w", encoding="utf-8") as f:
     f.write(html)
 print(f"\n  Report saved: {outpath}")
 
 pub_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "reportes")
 if os.path.isdir(pub_dir):
-    pub_path = os.path.join(pub_dir, "Dragon_SMA200_Backtest.html")
+    pub_path = os.path.join(pub_dir, "DragonDobleSMA_Backtest.html")
     with open(pub_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"  Public copy: {pub_path}")

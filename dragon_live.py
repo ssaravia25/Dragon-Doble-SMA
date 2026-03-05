@@ -608,8 +608,8 @@ def build_nav_chart():
     while pct <= y_max + step:
         yp = mt + ph - ((pct - y_min) / y_range) * ph
         if mt - 5 <= yp <= vh - mb + 5:
-            svg += f'<line x1="{ml}" y1="{yp:.0f}" x2="{vw-mr}" y2="{yp:.0f}" stroke="#e5e7eb" stroke-width="0.5"/>'
-            svg += f'<text x="{ml-8}" y="{yp:.0f}" text-anchor="end" fill="#6b7280" font-size="10" dominant-baseline="middle">${pct:,.0f}</text>'
+            svg += f'<line x1="{ml}" y1="{yp:.0f}" x2="{vw-mr}" y2="{yp:.0f}" stroke="#334155" stroke-width="0.5"/>'
+            svg += f'<text x="{ml-8}" y="{yp:.0f}" text-anchor="end" fill="#94a3b8" font-size="10" dominant-baseline="middle">${pct:,.0f}</text>'
         pct += step
     # X axis dates
     dates_nav = [dates_live[0]] + list(dates_live)
@@ -621,8 +621,8 @@ def build_nav_chart():
             seen.add(key)
             x = ml + (i / max(n_pts - 1, 1)) * pw
             if len(seen) % 2 == 0:
-                svg += f'<text x="{x:.0f}" y="{vh-8}" text-anchor="middle" fill="#9ca3af" font-size="9">{d.strftime("%Y-%m-%d")}</text>'
-                svg += f'<line x1="{x:.0f}" y1="{mt}" x2="{x:.0f}" y2="{vh-mb}" stroke="#f3f4f6" stroke-width="0.5"/>'
+                svg += f'<text x="{x:.0f}" y="{vh-8}" text-anchor="middle" fill="#64748b" font-size="9">{d.strftime("%Y-%m-%d")}</text>'
+                svg += f'<line x1="{x:.0f}" y1="{mt}" x2="{x:.0f}" y2="{vh-mb}" stroke="#1e293b" stroke-width="0.5"/>'
     # Area fill
     pts_line = []
     for i in range(n_pts):
@@ -650,7 +650,7 @@ def build_donut():
         x1i,y1i = cx+ri*math.cos(a2), cy+ri*math.sin(a2)
         x2i,y2i = cx+ri*math.cos(a1), cy+ri*math.sin(a1)
         lg = 1 if sweep > 180 else 0
-        svg += f'<path d="M {x1o:.1f},{y1o:.1f} A {r},{r} 0 {lg},1 {x2o:.1f},{y2o:.1f} L {x1i:.1f},{y1i:.1f} A {ri},{ri} 0 {lg},0 {x2i:.1f},{y2i:.1f} Z" fill="{color}" stroke="white" stroke-width="2"/>'
+        svg += f'<path d="M {x1o:.1f},{y1o:.1f} A {r},{r} 0 {lg},1 {x2o:.1f},{y2o:.1f} L {x1i:.1f},{y1i:.1f} A {ri},{ri} 0 {lg},0 {x2i:.1f},{y2i:.1f} Z" fill="{color}" stroke="#0f172a" stroke-width="2"/>'
         angle += sweep
     # Legend
     legend_y = cy + r + 25
@@ -659,7 +659,7 @@ def build_donut():
     for name, w, color in legend_items:
         label = BLOCK_LABELS.get(name, name)
         svg += f'<circle cx="{lx}" cy="{legend_y}" r="5" fill="{color}"/>'
-        svg += f'<text x="{lx+10}" y="{legend_y+4}" fill="#6b7280" font-size="10">{label}</text>'
+        svg += f'<text x="{lx+10}" y="{legend_y+4}" fill="#94a3b8" font-size="10">{label}</text>'
         lx += len(label) * 7 + 30
     return f'<svg viewBox="0 0 240 {legend_y + 20}" xmlns="http://www.w3.org/2000/svg">{svg}</svg>'
 
@@ -689,9 +689,9 @@ def build_ytd_chart():
         yp = mt + ph - ((pct - y_min) / y_range) * ph
         if yp < mt - 5 or yp > vh - mb + 5:
             pct += step; continue
-        w, op = ("1", "0.2") if pct == 0 else ("0.5", "0.08")
-        svg += f'<line x1="{ml}" y1="{yp:.0f}" x2="{vw-mr}" y2="{yp:.0f}" stroke="rgba(0,0,0,{op})" stroke-width="{w}"/>'
-        svg += f'<text x="{ml-5}" y="{yp:.0f}" text-anchor="end" fill="#6b7280" font-size="9" dominant-baseline="middle">{pct:+.0f}%</text>'
+        w, op = ("1", "0.4") if pct == 0 else ("0.5", "0.15")
+        svg += f'<line x1="{ml}" y1="{yp:.0f}" x2="{vw-mr}" y2="{yp:.0f}" stroke="rgba(148,163,184,{op})" stroke-width="{w}"/>'
+        svg += f'<text x="{ml-5}" y="{yp:.0f}" text-anchor="end" fill="#94a3b8" font-size="9" dominant-baseline="middle">{pct:+.0f}%</text>'
         pct += step
     month_names = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]
     seen = set()
@@ -699,7 +699,7 @@ def build_ytd_chart():
         if d.month not in seen:
             seen.add(d.month)
             x = ml + (i / max(n_pts - 1, 1)) * pw
-            svg += f'<text x="{x:.0f}" y="{vh-5}" text-anchor="middle" fill="#6b7280" font-size="9">{month_names[d.month-1]}</text>'
+            svg += f'<text x="{x:.0f}" y="{vh-5}" text-anchor="middle" fill="#94a3b8" font-size="9">{month_names[d.month-1]}</text>'
     end_vals = {}
     for t in ALL_TICKERS:
         if t not in ytd_data: continue
@@ -811,7 +811,7 @@ def positions_table_html():
             s50_txt = "SALIDA" if s50["exited"] else "OK"
             s50_clr = "#ef4444" if s50["exited"] else "#10b981"
             s50_pct = f' ({s50["pct_from_sma"]:+.1f}%)' if s50["pct_from_sma"] is not None else ""
-            row_bg = "background:rgba(239,68,68,0.04);" if s50["exited"] else ""
+            row_bg = "background:rgba(239,68,68,0.1);" if s50["exited"] else ""
         else:
             s50_txt, s50_clr, s50_pct, row_bg = "—", "#9ca3af", "", ""
         rows += f'''<tr style="{row_bg}">
@@ -950,91 +950,91 @@ html = f'''<!DOCTYPE html>
 <title>Centinela v3 LIVE | SFinance-alicIA</title>
 <style>
 * {{ margin:0; padding:0; box-sizing:border-box; }}
-body {{ font-family: 'Inter', -apple-system, sans-serif; background:#ffffff; color:#1e293b; }}
+body {{ font-family: 'Inter', -apple-system, sans-serif; background:#0f172a; color:#e2e8f0; }}
 .container {{ max-width:1200px; margin:0 auto; padding:24px 20px; }}
 
 /* Tabs */
-.tabs {{ display:flex; gap:0; border-bottom:2px solid #e5e7eb; margin-bottom:28px; }}
-.tab {{ padding:10px 20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; color:#9ca3af; text-decoration:none; }}
+.tabs {{ display:flex; gap:0; border-bottom:2px solid #334155; margin-bottom:28px; }}
+.tab {{ padding:10px 20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; color:#64748b; text-decoration:none; }}
 .tab.active {{ color:#06b6d4; border-bottom-color:#06b6d4; }}
 
 /* Header */
 .header {{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }}
 .header-left h1 {{ font-size:28px; font-weight:800; letter-spacing:-0.5px; }}
 .header-left h1 span {{ color:#06b6d4; }}
-.live-badge {{ display:inline-block; background:#dcfce7; color:#16a34a; font-size:10px; font-weight:700; padding:2px 10px; border-radius:12px; margin-left:10px; vertical-align:middle; }}
-.header-left .subtitle {{ font-size:11px; color:#6b7280; margin-top:4px; }}
-.header-right {{ text-align:right; font-size:11px; color:#6b7280; }}
-.header-right strong {{ color:#374151; }}
+.live-badge {{ display:inline-block; background:rgba(16,185,129,0.15); color:#34d399; font-size:10px; font-weight:700; padding:2px 10px; border-radius:12px; margin-left:10px; vertical-align:middle; }}
+.header-left .subtitle {{ font-size:11px; color:#94a3b8; margin-top:4px; }}
+.header-right {{ text-align:right; font-size:11px; color:#94a3b8; }}
+.header-right strong {{ color:#cbd5e1; }}
 
 /* NAV Card */
-.nav-card {{ background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; padding:24px 32px; margin-bottom:28px; display:flex; align-items:center; gap:40px; flex-wrap:wrap; }}
+.nav-card {{ background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px 32px; margin-bottom:28px; display:flex; align-items:center; gap:40px; flex-wrap:wrap; }}
 .nav-main {{ }}
-.nav-label {{ font-size:9px; text-transform:uppercase; letter-spacing:1px; color:#9ca3af; font-weight:600; margin-bottom:4px; }}
-.nav-value {{ font-size:36px; font-weight:800; letter-spacing:-1px; color:#1e293b; }}
+.nav-label {{ font-size:9px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:600; margin-bottom:4px; }}
+.nav-value {{ font-size:36px; font-weight:800; letter-spacing:-1px; color:#f1f5f9; }}
 .nav-change {{ font-size:13px; margin-top:2px; }}
 .nav-kpis {{ display:flex; gap:32px; flex-wrap:wrap; }}
 .nav-kpi {{ text-align:center; }}
-.nav-kpi-label {{ font-size:9px; text-transform:uppercase; color:#9ca3af; font-weight:600; letter-spacing:0.5px; }}
+.nav-kpi-label {{ font-size:9px; text-transform:uppercase; color:#64748b; font-weight:600; letter-spacing:0.5px; }}
 .nav-kpi-value {{ font-size:20px; font-weight:800; margin-top:2px; }}
-.nav-kpi-sub {{ font-size:10px; color:#9ca3af; }}
-.pos {{ color:#10b981; }} .neg {{ color:#ef4444; }}
+.nav-kpi-sub {{ font-size:10px; color:#64748b; }}
+.pos {{ color:#34d399; }} .neg {{ color:#f87171; }}
 
 /* Chart */
 .chart-container {{ margin-bottom:28px; }}
-.section-title {{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#6b7280; margin-bottom:12px; }}
+.section-title {{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#94a3b8; margin-bottom:12px; }}
 
 /* Exposure strip */
 .exp-strip {{ display:grid; grid-template-columns:repeat(9, 1fr); gap:8px; margin-bottom:28px; }}
-.exp-item {{ background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:12px 8px; text-align:center; }}
-.exp-label {{ font-size:8px; text-transform:uppercase; color:#9ca3af; font-weight:600; letter-spacing:0.5px; }}
+.exp-item {{ background:#1e293b; border:1px solid #334155; border-radius:8px; padding:12px 8px; text-align:center; }}
+.exp-label {{ font-size:8px; text-transform:uppercase; color:#64748b; font-weight:600; letter-spacing:0.5px; }}
 .exp-value {{ font-size:18px; font-weight:800; color:#06b6d4; margin:4px 0; }}
-.exp-sub {{ font-size:8px; color:#9ca3af; }}
+.exp-sub {{ font-size:8px; color:#64748b; }}
 
 /* Signal blocks */
 .signal-grid {{ display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; margin-bottom:28px; }}
-.signal-card {{ background:#ffffff; border:1px solid #e5e7eb; border-radius:8px; padding:14px; }}
+.signal-card {{ background:#1e293b; border:1px solid #334155; border-radius:8px; padding:14px; }}
 .signal-header {{ margin-bottom:10px; font-size:13px; }}
-.signal-wpct {{ color:#9ca3af; font-size:11px; }}
+.signal-wpct {{ color:#64748b; font-size:11px; }}
 .signal-row {{ display:flex; justify-content:space-between; align-items:center; padding:3px 0; font-size:11px; }}
 .signal-ticker {{ font-weight:700; }}
-.signal-name {{ color:#6b7280; font-size:10px; }}
+.signal-name {{ color:#94a3b8; font-size:10px; }}
 .signal-mom {{ font-weight:600; }}
-.signal-exp {{ margin-top:8px; padding-top:8px; border-top:1px solid #f3f4f6; font-size:10px; color:#6b7280; }}
+.signal-exp {{ margin-top:8px; padding-top:8px; border-top:1px solid #334155; font-size:10px; color:#94a3b8; }}
 
 /* Positions + Donut grid */
 .pos-donut-grid {{ display:grid; grid-template-columns:1fr 280px; gap:24px; margin-bottom:28px; }}
 .data-table {{ width:100%; border-collapse:collapse; font-size:11px; }}
-.data-table th {{ background:#f9fafb; color:#6b7280; font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:0.5px; padding:10px 8px; text-align:left; border-bottom:1px solid #e5e7eb; }}
-.data-table td {{ padding:8px; border-bottom:1px solid #f3f4f6; }}
+.data-table th {{ background:#1e293b; color:#94a3b8; font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:0.5px; padding:10px 8px; text-align:left; border-bottom:1px solid #334155; }}
+.data-table td {{ padding:8px; border-bottom:1px solid #1e293b; }}
 .data-table .num {{ text-align:right; font-variant-numeric:tabular-nums; }}
-.data-table tr:hover {{ background:#f9fafb; }}
+.data-table tr:hover {{ background:#1e293b; }}
 
 /* SMA200 cards */
 .sma-grid {{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; margin-bottom:28px; }}
-.sma-card {{ background:#ffffff; border:1px solid #e5e7eb; border-radius:8px; padding:12px; }}
+.sma-card {{ background:#1e293b; border:1px solid #334155; border-radius:8px; padding:12px; }}
 .sma-card-header {{ display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }}
-.sma-card-name {{ font-size:10px; color:#9ca3af; }}
-.sma-card-price {{ font-size:12px; font-weight:600; color:#1e293b; margin-top:2px; }}
-.sma-card-sma {{ font-size:10px; color:#9ca3af; }}
+.sma-card-name {{ font-size:10px; color:#64748b; }}
+.sma-card-price {{ font-size:12px; font-weight:600; color:#f1f5f9; margin-top:2px; }}
+.sma-card-sma {{ font-size:10px; color:#64748b; }}
 
 /* SMA50 Alert Banners */
 .alert-banner {{ border-radius:8px; padding:14px 18px; margin-bottom:16px; border-left:4px solid; }}
-.alert-exit {{ background:rgba(239,68,68,0.06); border-color:#ef4444; }}
-.alert-entry {{ background:rgba(16,185,129,0.06); border-color:#10b981; }}
-.alert-watch {{ background:rgba(245,158,11,0.06); border-color:#f59e0b; }}
-.alert-info {{ background:rgba(100,116,139,0.06); border-color:#64748b; }}
-.alert-ok {{ background:rgba(16,185,129,0.03); border-color:#10b981; }}
+.alert-exit {{ background:rgba(239,68,68,0.12); border-color:#ef4444; }}
+.alert-entry {{ background:rgba(16,185,129,0.12); border-color:#10b981; }}
+.alert-watch {{ background:rgba(245,158,11,0.12); border-color:#f59e0b; }}
+.alert-info {{ background:rgba(100,116,139,0.12); border-color:#64748b; }}
+.alert-ok {{ background:rgba(16,185,129,0.08); border-color:#10b981; }}
 .alert-title {{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }}
-.alert-exit .alert-title {{ color:#ef4444; }}
-.alert-entry .alert-title {{ color:#10b981; }}
-.alert-watch .alert-title {{ color:#f59e0b; }}
-.alert-info .alert-title {{ color:#64748b; }}
-.alert-ok .alert-title {{ color:#10b981; }}
-.alert-action {{ font-size:12px; font-family:'Courier New',monospace; color:#374151; padding:3px 0; }}
+.alert-exit .alert-title {{ color:#f87171; }}
+.alert-entry .alert-title {{ color:#34d399; }}
+.alert-watch .alert-title {{ color:#fbbf24; }}
+.alert-info .alert-title {{ color:#94a3b8; }}
+.alert-ok .alert-title {{ color:#34d399; }}
+.alert-action {{ font-size:12px; font-family:'Courier New',monospace; color:#cbd5e1; padding:3px 0; }}
 
 /* Footer */
-.footer {{ display:flex; justify-content:space-between; font-size:9px; color:#9ca3af; padding:16px 0; border-top:1px solid #e5e7eb; margin-top:24px; }}
+.footer {{ display:flex; justify-content:space-between; font-size:9px; color:#64748b; padding:16px 0; border-top:1px solid #334155; margin-top:24px; }}
 
 @media (max-width: 900px) {{
     .exp-strip {{ grid-template-columns:repeat(4, 1fr); }}
@@ -1111,9 +1111,9 @@ body {{ font-family: 'Inter', -apple-system, sans-serif; background:#ffffff; col
     <div class="exp-item"><div class="exp-label">Long Vol</div><div class="exp-value" style="font-size:14px;color:#ef4444">BTAL</div><div class="exp-sub">fijo 21%</div></div>
     <div class="exp-item"><div class="exp-label">Cmdty Trend</div><div class="exp-value">{cmdty_exp:.0%}</div><div class="exp-sub">DBC SMA200 gate</div></div>
     <div class="exp-item"><div class="exp-label">SMA50 Salidas</div><div class="exp-value" style="color:{'#ef4444' if exited_tickers else '#10b981'}">{len(exited_tickers)}</div><div class="exp-sub">en SHY</div></div>
-    <div class="exp-item"><div class="exp-label">Posiciones</div><div class="exp-value" style="color:#1e293b">{n_positions}</div><div class="exp-sub">tickers activos</div></div>
-    <div class="exp-item"><div class="exp-label">Cash (SHY)</div><div class="exp-value" style="color:#1e293b">{cash_pct:.0%}</div><div class="exp-sub">capital protegido</div></div>
-    <div class="exp-item"><div class="exp-label">Proximo Rebal</div><div class="exp-value" style="color:#1e293b">{days_to_rebal}d</div><div class="exp-sub">{next_rebal.strftime("%Y-%m-%d")}</div></div>
+    <div class="exp-item"><div class="exp-label">Posiciones</div><div class="exp-value" style="color:#f1f5f9">{n_positions}</div><div class="exp-sub">tickers activos</div></div>
+    <div class="exp-item"><div class="exp-label">Cash (SHY)</div><div class="exp-value" style="color:#f1f5f9">{cash_pct:.0%}</div><div class="exp-sub">capital protegido</div></div>
+    <div class="exp-item"><div class="exp-label">Proximo Rebal</div><div class="exp-value" style="color:#f1f5f9">{days_to_rebal}d</div><div class="exp-sub">{next_rebal.strftime("%Y-%m-%d")}</div></div>
   </div>
 
   <div class="section-title">Senales por Bloque — Ultima Senal</div>
@@ -1139,8 +1139,8 @@ body {{ font-family: 'Inter', -apple-system, sans-serif; background:#ffffff; col
   </div>
 
   <div class="section-title">Evolutivo YTD {LIVE_YEAR} — Todos los Activos (Base 0%)</div>
-  <div class="chart-container" style="border:1px solid #e5e7eb;border-radius:8px;padding:12px">{build_ytd_chart()}</div>
-  <div style="margin-top:6px;font-size:9px;color:#9ca3af">
+  <div class="chart-container" style="border:1px solid #334155;border-radius:8px;padding:12px">{build_ytd_chart()}</div>
+  <div style="margin-top:6px;font-size:9px;color:#64748b">
     Retorno acumulado desde el 1 de enero {LIVE_YEAR}. <span style="color:#06b6d4;font-weight:700">Linea cyan = Centinela v3.</span>
   </div>
 
@@ -1164,14 +1164,14 @@ body {{ font-family: 'Inter', -apple-system, sans-serif; background:#ffffff; col
 # ═══════════════════════════════════════════════════════════════════
 # 11. OUTPUT
 # ═══════════════════════════════════════════════════════════════════
-outpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Dragon_Live.html")
+outpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "DragonDobleSMA_Live.html")
 with open(outpath, "w", encoding="utf-8") as f:
     f.write(html)
 print(f"\n  Report saved: {outpath}")
 
 pub_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "reportes")
 if os.path.isdir(pub_dir):
-    pub_path = os.path.join(pub_dir, "Dragon_Live.html")
+    pub_path = os.path.join(pub_dir, "DragonDobleSMA_Live.html")
     with open(pub_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"  Public copy: {pub_path}")
