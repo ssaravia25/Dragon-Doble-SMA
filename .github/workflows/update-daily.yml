@@ -2,7 +2,8 @@ name: Daily DragonDobleSMA Update
 
 on:
   schedule:
-    - cron: '0 20 * * 1-5'    # 16:00 ET (EDT) / 15:00 ET (EST) — US market close
+    - cron: '0 19 * * 1-5'    # 15:00 ET (EDT) — Mar-Nov
+    - cron: '0 20 * * 1-5'    # 15:00 ET (EST) — Nov-Mar
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 permissions:
@@ -12,30 +13,48 @@ jobs:
   update-reports:
     runs-on: ubuntu-latest
     steps:
+      - name: Skip if not 3pm NY
+        id: timecheck
+        run: |
+          NY_HOUR=$(TZ=America/New_York date +%H)
+          echo "NY hour: $NY_HOUR"
+          if [ "$NY_HOUR" != "15" ] && [ "$GITHUB_EVENT_NAME" == "schedule" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout
+        if: steps.timecheck.outputs.skip != 'true'
         uses: actions/checkout@v4
 
       - name: Set up Python
+        if: steps.timecheck.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
 
       - name: Install dependencies
+        if: steps.timecheck.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
       - name: Delete price cache (force fresh data)
+        if: steps.timecheck.outputs.skip != 'true'
         run: rm -f price_cache.json
 
       - name: Run dragon_sma200.py (backtest)
+        if: steps.timecheck.outputs.skip != 'true'
         run: python dragon_sma200.py
 
       - name: Run dragon_live.py (live dashboard + email)
+        if: steps.timecheck.outputs.skip != 'true'
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: python dragon_live.py
 
       - name: Commit updated reports
+        if: steps.timecheck.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
